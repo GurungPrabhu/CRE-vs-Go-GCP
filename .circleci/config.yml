@@ -8,28 +8,11 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-          name: Install Google Cloud SDK
-          command: apk update && \
-            apk add --no-cache bash curl && \
-            curl https://sdk.cloud.google.com | bash
-      - run:
-          name: Configure gcloud
-          command: |
-            echo $GCLOUD_SERVICE_KEY | base64 --decode | gcloud auth activate-service-account --key-file=-
-            gcloud config set project $GCLOUD_PROJECT_ID
-            gcloud --quiet config set compute/zone ${GCLOUD_ZONE}
-      - run:
           name: Build and push Docker image
           command: |
             docker build -t ${DOCKER_USERNAME}/my-first-container:${CIRCLE_SHA1} .
             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
             docker push ${DOCKER_USERNAME}/my-first-container:${CIRCLE_SHA1}
-
-      - run:
-          name: Deploy docker image to app engine
-          command: |
-            gcloud app deploy --image-url=docker.io/${DOCKER_USERNAME}/my-first-container:${CIRCLE_SHA1} --quiet --version=${CIRCLE_SHA1}
-
 workflows:
   build-and-deploy:
     jobs:
