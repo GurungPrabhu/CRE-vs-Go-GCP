@@ -22,9 +22,9 @@ jobs:
       - run:
           name: Build and push Docker image
           command: |
-            docker build -t prabhugurung/my-first-container:${CIRCLE_SHA1} .
+            docker build -t ${DOCKER_USERNAME}/my-first-container:${CIRCLE_SHA1} .
             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-            docker push prabhugurung/my-first-container:${CIRCLE_SHA1}
+            docker push ${DOCKER_USERNAME}/my-first-container:${CIRCLE_SHA1}
 
       - run:
           name: Deploy docker image to app engine
