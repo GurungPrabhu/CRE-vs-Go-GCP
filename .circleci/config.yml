@@ -10,7 +10,7 @@ jobs:
       - run:
           name: Install Google Cloud SDK
           command: apk update && \
-            apk update && apk add --no-cache bash curl && \
+            apk add --no-cache bash curl && \
             curl https://sdk.cloud.google.com | bash
       - run:
           name: Configure gcloud
