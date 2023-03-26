@@ -12,7 +12,7 @@ jobs:
           command: |
             docker build -t prabhugurung/my-first-container:${CIRCLE_SHA1} .
             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-            docker push username/my-app:${CIRCLE_SHA1}
+            docker push username/my-first-container:${CIRCLE_SHA1}
 
       - run:
           name: Deploy docker image to app engine
