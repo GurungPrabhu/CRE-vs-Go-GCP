@@ -18,6 +18,7 @@ jobs:
     docker:
       - image: google/cloud-sdk:latest
     steps:
+      - checkout
       - run:
           name: Authenticating and configuring the Google Cloud Platform
           command: |
