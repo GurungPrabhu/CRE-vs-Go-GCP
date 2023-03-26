@@ -9,12 +9,9 @@ jobs:
       - setup_remote_docker
       - run:
           name: Install Google Cloud SDK
-          command: apt-get update && \
-            apt-get install -y curl gnupg && \
-            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
-            echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
-            apt-get update && \
-            apt-get install -y google-cloud-sdk
+          command: apk update && \
+            apk update && apk add --no-cache bash curl && \
+            curl https://sdk.cloud.google.com | bash
       - run:
           name: Configure gcloud
           command: |
