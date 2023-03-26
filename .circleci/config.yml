@@ -14,11 +14,11 @@ jobs:
             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
             docker push ${DOCKER_USERNAME}/my-first-container:${CIRCLE_SHA1}
 
-  deploy: 
-    docker:  
-      - img: google/cloud-sdk:latest
+  deploy:
+    docker:
+      - image: google/cloud-sdk:latest
     steps:
-     - run:
+      - run:
           name: Authenticating and configuring the Google Cloud Platform
           command: |
             echo $GCLOUD_SERVICE_KEY | base64 --decode | gcloud auth activate-service-account --key-file=-
@@ -31,5 +31,5 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
-      - build:
-      - deploy:
+      - build
+      - deploy
