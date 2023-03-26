@@ -8,11 +8,23 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
+          name: Install Google Cloud SDK
+          command: |
+            echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+            sudo apt-get update && sudo apt-get install google-cloud-sdk
+      - run:
+          name: Configure gcloud
+          command: |
+            echo $GCLOUD_SERVICE_KEY | base64 --decode | gcloud auth activate-service-account --key-file=-
+            gcloud config set project $GCLOUD_PROJECT_ID
+            gcloud --quiet config set compute/zone ${GCLOUD_ZONE}
+      - run:
           name: Build and push Docker image
           command: |
             docker build -t prabhugurung/my-first-container:${CIRCLE_SHA1} .
             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-            docker push username/my-first-container:${CIRCLE_SHA1}
+            docker push prabhugurung/my-first-container:${CIRCLE_SHA1}
 
       - run:
           name: Deploy docker image to app engine
