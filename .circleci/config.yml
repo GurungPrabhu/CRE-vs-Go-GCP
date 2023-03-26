@@ -27,7 +27,7 @@ jobs:
       - run:
           name: Deploy docker image to app engine
           command: |
-            gcloud app deploy --image-url=docker.io/${DOCKER_USERNAME}/my-first-container:${CIRCLE_SHA1} --quiet --version=${CIRCLE_SHA1}
+            gcloud app deploy ../app.yaml --image-url=docker.io/${DOCKER_USERNAME}/my-first-container:${CIRCLE_SHA1} --quiet --version=${CIRCLE_SHA1}
 workflows:
   build-and-deploy:
     jobs:
