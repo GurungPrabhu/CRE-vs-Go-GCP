@@ -1,10 +1,28 @@
 version: 2.1
-orbs:
-  gcp-gcr: circleci/gcp-gcr@0.15.1
+
+jobs:
+  build-push-and-deploy:
+    docker:
+      - image: google/cloud-sdk:latest
+    steps:
+      - checkout
+      - run:
+          name: Authenticating and configuring the Google Cloud Platform
+          command: |
+            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+      - run:
+          name: Build Docker image
+          command: docker build -t asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${CIRCLE_SHA1} .
+      - run:
+          name: Push docker image to GCR
+          command: docker build -t asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${CIRCLE_SHA1} .
+      - run:
+          name: Deploy docker image to app engine
+          command: |
+            gcloud app deploy app.yaml --image-url=asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${CIRCLE_SHA1} --quiet --version=${CIRCLE_SHA1}
 workflows:
-  build_and_push_image:
+  build-and-deploy:
     jobs:
-      - gcp-gcr/build-and-push-image:
-          image: my-image
-          setup-remote-docker: true
-          use-docker-layer-caching: true
+      - build-push-and-deploy
