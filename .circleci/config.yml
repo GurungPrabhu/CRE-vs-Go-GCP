@@ -8,24 +8,7 @@ jobs:
         executor: my-executor
         image: my-first-container:${CIRCLE_SHA1}
         use-docker-layer-caching: true
-  # deploy:
-  #   docker:
-  #     - image: google/cloud-sdk:latest
-  #   steps:
-  #     - run:
-  #         name: Authenticating and configuring the Google Cloud Platform
-  #         command: |
-  #           echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
-  #           gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
-  #           gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
-  #     - run:
-  #         name: Deploy docker image to app engine
-  #         command: |
-  #           gcloud app deploy ../app.yaml --image-url=docker.io/${DOCKER_USERNAME}/my-first-container:${CIRCLE_SHA1} --quiet --version=${CIRCLE_SHA1}
 workflows:
   build-and-deploy:
     jobs:
       - build-and-push
-      # - deploy:
-      #     requires:
-      #       - build
