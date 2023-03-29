@@ -1,11 +1,19 @@
 version: 2.1
-
+orbs:
+  docker: circleci/docker@2.2.0
 jobs:
   build-push-and-deploy:
     docker:
       - image: google/cloud-sdk:latest
     steps:
       - checkout
+      - run:
+          name: Start DinD container
+          command: |
+            docker run -d --privileged -p 2375:2375 docker:dind
+      - run:
+          name: Set Docker API endpoint
+          command: export DOCKER_HOST=tcp://localhost:2375
       - run:
           name: Authenticating and configuring the Google Cloud Platform
           command: |
