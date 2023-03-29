@@ -1,19 +1,13 @@
 version: 2.1
-orbs:
-  docker: circleci/docker@2.2.0
 jobs:
   build-push-and-deploy:
     docker:
       - image: google/cloud-sdk:latest
     steps:
       - checkout
-      - run:
-          name: Start DinD container
-          command: |
-            docker run -d --privileged -p 2375:2375 docker:dind
-      - run:
-          name: Set Docker API endpoint
-          command: export DOCKER_HOST=tcp://localhost:2375
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
       - run:
           name: Authenticating and configuring the Google Cloud Platform
           command: |
@@ -25,7 +19,7 @@ jobs:
           command: docker build -t asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${CIRCLE_SHA1} .
       - run:
           name: Push docker image to GCR
-          command: docker build -t asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${CIRCLE_SHA1} .
+          command: docker push asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${CIRCLE_SHA1}
       - run:
           name: Deploy docker image to app engine
           command: |
