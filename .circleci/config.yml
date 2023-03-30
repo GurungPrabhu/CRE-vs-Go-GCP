@@ -29,7 +29,7 @@ jobs:
       - run:
           name: Deploy docker image to app engine
           command: |
-            gcloud app deploy app.yaml --image-url=asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:latest --quiet --version=latest
+            gcloud app deploy app.yaml --image-url=asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:latest --quiet
 workflows:
   build-and-deploy:
     jobs:
