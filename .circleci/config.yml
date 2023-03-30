@@ -1,4 +1,7 @@
 version: 2.1
+machine:
+  environment:
+    SHORT_GIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)
 jobs:
   build-push-and-deploy:
     docker:
@@ -16,17 +19,17 @@ jobs:
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
       - run:
           name: Build Docker image
-          command: docker build -t asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${CIRCLE_SHA1} .
+          command: docker build -t asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${SHORT_GIT_HASH} .
       - run:
           name: Authenticate Docker to gcloud
           command: echo $GCLOUD_SERVICE_KEY | docker login -u _json_key --password-stdin https://asia.gcr.io
       - run:
           name: Push docker image to GCR
-          command: docker push asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${CIRCLE_SHA1}
+          command: docker push asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${SHORT_GIT_HASH}
       - run:
           name: Deploy docker image to app engine
           command: |
-            gcloud app deploy app.yaml --image-url=asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${CIRCLE_SHA1} --quiet --version=${CIRCLE_SHA1}
+            gcloud app deploy app.yaml --image-url=asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${SHORT_GIT_HASH} --quiet --version=${SHORT_GIT_HASH}
 workflows:
   build-and-deploy:
     jobs:
