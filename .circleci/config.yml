@@ -19,7 +19,7 @@ jobs:
           command: docker build -t asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${CIRCLE_SHA1} .
       - run:
           name: Authenticate Docker to gcloud
-          command: echo $GCLOUD_SERVICE_KEY | docker login -u  _json_key --key-file=-
+          command: echo $GCLOUD_SERVICE_KEY | docker login -u _json_key --password-stdin https://asia.gcr.io
       - run:
           name: Push docker image to GCR
           command: docker push asia.gcr.io/${GOOGLE_PROJECT_ID}/my-first-container:${CIRCLE_SHA1}
