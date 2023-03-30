@@ -20,5 +20,5 @@ COPY --from=BUILD usr/src/myapp/myapp  usr/myapp
 EXPOSE 8080
 
 # Command to run when starting the container
-CMD ["./upsr/myapp"]
+CMD ["./myapp"]
 
