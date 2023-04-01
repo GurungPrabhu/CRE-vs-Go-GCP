@@ -1,4 +1,4 @@
-runtime: go119
+runtime: custom
 env: flex
 
 service: third-service
