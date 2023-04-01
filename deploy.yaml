@@ -1,7 +1,7 @@
-runtime: go
+runtime: go119
 env: flex
 
-service: second-service
+service: third-service
 resources:
   cpu: 1
   memory_gb: 1
