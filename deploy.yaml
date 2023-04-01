@@ -1,4 +1,4 @@
-runtime: custom
+runtime: go1.19
 env: flex
 
 service: third-service
